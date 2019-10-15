@@ -1,0 +1,20 @@
+version: 1.0
+name: java-apb
+description: HELLO Demo APB Implementation
+bindable: False
+async: optional
+metadata: 
+  documentationUrl: https://github.com/janepelladinesh/pyzip-demo-apb
+  dependencies: ['docker.io/ansibleplaybookbundle/py-zip-demo:latest']
+  displayName: JAVA SPRING  DINESH  (APB)
+  longDescription: APB Implementation of the hello webapp, https://github.com/fusor/py-zip-demo
+  providerDisplayName: "Red Hat, Inc."
+plans:
+  - name: default
+    description: HELLO Demo APB Implementation
+    free: True
+    metadata:
+      displayName: Default
+      longDescription: This plan provides a HELLO app for https://github.com/fusor/py-zip-demo
+      cost: $0.00
+    parameters: []

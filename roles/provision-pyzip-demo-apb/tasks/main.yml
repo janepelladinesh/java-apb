@@ -1,0 +1,57 @@
+- name: create hello-demo route
+  openshift_v1_route:
+    name: hello-demo
+    namespace: '{{ namespace }}'
+    spec_port_target_port: web
+    labels:
+      app: hello-demo-apb
+      service: hello-demo
+    to_name: hello-demo
+    state: "{{ state }}"
+
+- name: create hello-demo service
+  k8s_v1_service:
+    name: hello-demo
+    namespace: '{{ namespace }}'
+    labels:
+      app: hello-demo-apb
+      service: hello-demo
+    selector:
+      app: hello-demo-apb
+      service: hello-demo
+    ports:
+      - name: web
+        port: 5000
+        protocol: TCP
+        target_port: 5000
+    state: "{{ state }}"
+
+- name: create deployment config
+  openshift_v1_deployment_config:
+    name: hello-demo
+    namespace: '{{ namespace }}'
+    labels:
+      app: hello-demo-apb
+      service: hello-demo
+    replicas: 1
+    selector:
+      app: hello-demo-apb
+      service: hello-demo
+    spec_template_metadata_labels:
+      app: hello-demo-apb
+      service: hello-demo
+    containers:
+    - env:
+      image: docker.io/garystafford/hello-world:latest
+      image_pull_policy: IfNotPresent
+      name: hello-demo
+      ports:
+      - container_port: 5000
+        protocol: TCP
+    dns_policy: ClusterFirst
+    restart_policy: Always
+    termination_grace_period_seconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    state: "{{ state }}"
